@@ -1,0 +1,40 @@
+package main
+
+import "fmt"
+import "crypto/sha256"
+import "os"
+
+func main() {
+
+	file_info,err:=os.Stat("abc")
+	
+	if err!=nil{
+	fmt.Print("file stat error\n")
+	fmt.Print(err.Error)
+	return
+	}
+
+	PtoFile,err:=os.Open("abc")
+	
+	if err!= nil {
+	fmt.Print("file open error")
+	return
+	}
+
+	content_of_file:=make([]byte,file_info.Size())
+	
+	len_of_read,err:=PtoFile.Read(content_of_file)
+	
+	if err!=nil{
+	fmt.Print("read error\n")
+	return
+	}
+	if ((int64)(len_of_read))!=file_info.Size(){
+	fmt.Print("read error2\n")
+	return
+	}
+
+	sum:=sha256.Sum256(content_of_file)
+	fmt.Printf("%x\n",sum)
+
+}
